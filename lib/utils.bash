@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for pdm.
-GH_REPO="https://github.com/1oglop1/asdf-pdm"
+GH_REPO="https://github.com/pdm-project/pdm"
 TOOL_NAME="pdm"
-TOOL_TEST="pdm --version"
+#TOOL_TEST="pdm --version"
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
@@ -24,28 +24,15 @@ sort_versions() {
     LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
+# NOTE: You might want to adapt this sed to remove non-version strings from tags
 list_github_tags() {
   git ls-remote --tags --refs "$GH_REPO" |
     grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+    sed 's/^v//'
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function if pdm has other means of determining installable versions.
   list_github_tags
-}
-
-download_release() {
-  local version filename url
-  version="$1"
-  filename="$2"
-
-  # TODO: Adapt the release URL convention for pdm
-  url="$GH_REPO/archive/v${version}.tar.gz"
-
-  echo "* Downloading $TOOL_NAME release $version..."
-  curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
 install_version() {
@@ -58,17 +45,17 @@ install_version() {
   fi
 
   (
-    mkdir -p "$install_path"
-    cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+    install_url="https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py"
+    curl -sSL "$install_url" | PDM_HOME=$install_path python3 - --version "$version"
 
     # TODO: Asert pdm executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
-
+    echo "No need to modify your path, asdf took care of it."
     echo "$TOOL_NAME $version installation was successful!"
   ) || (
     rm -rf "$install_path"
-    fail "An error ocurred while installing $TOOL_NAME $version."
+    fail "An error occurred while installing $TOOL_NAME $version."
   )
 }

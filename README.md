@@ -1,6 +1,6 @@
 <div align="center">
 
-# asdf-pdm [![Build](https://github.com/1oglop1/asdf-pdm/actions/workflows/build.yml/badge.svg)](https://github.com/1oglop1/asdf-pdm/actions/workflows/build.yml) [![Lint](https://github.com/1oglop1/asdf-pdm/actions/workflows/lint.yml/badge.svg)](https://github.com/1oglop1/asdf-pdm/actions/workflows/lint.yml)
+# asdf-pdm [![build_svg]][build_yml] [![lint_svg]][lint_yml]
 
 
 [pdm](https://github.com/pdm-project/pdm) plugin for the [asdf version manager](https://asdf-vm.com).
@@ -11,14 +11,12 @@
 
 - [Dependencies](#dependencies)
 - [Install](#install)
-- [Why?](#why)
 - [Contributing](#contributing)
 - [License](#license)
 
 # Dependencies
 
-- `bash`, `curl`, `tar`: generic POSIX utilities.
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- `curl`, `python3.7+`
 
 # Install
 
@@ -58,3 +56,10 @@ Contributions of any kind welcome! See the [contributing guide](contributing.md)
 # License
 
 See [LICENSE](LICENSE) © [Jan Gazda](https://github.com/1oglop1/)
+
+
+[lint_yml]: https://github.com/1oglop1/asdf-pdm/actions/workflows/lint.yml
+[lint_svg]: https://github.com/1oglop1/asdf-pdm/actions/workflows/lint.yml/badge.svg
+
+[build_yml]: https://github.com/1oglop1/asdf-pdm/actions/workflows/build.yml
+[build_svg]: https://github.com/1oglop1/asdf-pdm/actions/workflows/build.yml/badge.svg
