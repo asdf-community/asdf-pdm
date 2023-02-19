@@ -5,7 +5,7 @@ set -euo pipefail
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for pdm.
 GH_REPO="https://github.com/pdm-project/pdm"
 TOOL_NAME="pdm"
-#TOOL_TEST="pdm --version"
+TOOL_TEST="pdm --version"
 
 fail() {
   echo -e "asdf-$TOOL_NAME: $*"
@@ -46,13 +46,12 @@ install_version() {
 
   (
     install_url="https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py"
-    curl -sSL "$install_url" | PDM_HOME=$install_path python3 - --version "$version"
+    curl -sSL "$install_url" | PDM_HOME=$install_path python3 - --version "$version" --skip-add-to-path
 
-    # TODO: Asert pdm executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
-    echo "No need to modify your path, asdf took care of it."
+
     echo "$TOOL_NAME $version installation was successful!"
   ) || (
     rm -rf "$install_path"
